@@ -121,8 +121,9 @@ export default class Versioning {
       const { tag, commits, hash } = versionDescriptor;
 
       // Ensure 3 digits (commits should always be patch level)
-      const [major, minor, patch] = `${tag}.${commits}`.split('.');
-      const threeDigitVersion = /^\d+$/.test(patch) ? `${major}.${minor}.${patch}` : `${major}.0.${minor}`;
+      const [major, minor = '0', patch = '0'] = tag.split('.');
+      const finalPatch = +patch + commits;
+      const threeDigitVersion = `${major}.${minor}.${finalPatch}`;
 
       core.info(`Found semantic version ${threeDigitVersion} for ${this.branch}@${hash}`);
 
